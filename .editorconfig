@@ -7,3 +7,4 @@ indent_style = space
 indent_size = 2
 max_line_length = 120
 ij_formatter_enabled = true
+ktlint_standard_no-blank-line-in-list = disabled
