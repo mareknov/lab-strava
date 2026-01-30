@@ -22,10 +22,10 @@ Kotlin/Spring Boot REST API for Strava activity management with RAG and LLM inte
 **Hexagonal architecture** with strict package organization under `com.lab.strava`:
 
 ### Root Packages
-- `config` - Spring configuration
-- `domain` - Domain features (business logic)
-- `infra` - External system clients and integrations
-- `utils` - Shared utilities
+- `config`   - Spring configuration
+- `domain`   - Domain features (business logic)
+- `external` - External system clients and integrations
+- `utils`    - Shared utilities
 
 ### Feature Package Structure
 Each feature in `domain` follows this structure:
