@@ -99,7 +99,7 @@ class UserControllerTest {
 
       mockMvc
         .perform(
-          post("/api/v1/users")
+          post("/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(
               """
@@ -140,7 +140,7 @@ class UserControllerTest {
 
       mockMvc
         .perform(
-          post("/api/v1/users")
+          post("/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""{"name": "John Doe", "email": "john@example.com"}"""),
         ).andExpect(status().isCreated)
@@ -157,7 +157,7 @@ class UserControllerTest {
     ) {
       mockMvc
         .perform(
-          post("/api/v1/users")
+          post("/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody),
         ).andExpect(status().isBadRequest)
@@ -172,7 +172,7 @@ class UserControllerTest {
       whenever(userUse.getUserById(TEST_ID)).thenReturn(user)
 
       mockMvc
-        .perform(get("/api/v1/users/$TEST_ID"))
+        .perform(get("/v1/users/$TEST_ID"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$.id").value(TEST_ID.toString()))
         .andExpect(jsonPath("$.name").value("John Doe"))
@@ -183,7 +183,7 @@ class UserControllerTest {
       whenever(userUse.getUserById(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
 
       mockMvc
-        .perform(get("/api/v1/users/$TEST_ID"))
+        .perform(get("/v1/users/$TEST_ID"))
         .andExpect(status().isNotFound)
         .andExpect(jsonPath("$.title").value("Entity Not Found"))
         .andExpect(jsonPath("$.entityType").value("User"))
@@ -197,7 +197,7 @@ class UserControllerTest {
       whenever(userUse.getAllUsers()).thenReturn(emptyList())
 
       mockMvc
-        .perform(get("/api/v1/users"))
+        .perform(get("/v1/users"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$").isArray)
         .andExpect(jsonPath("$.length()").value(0))
@@ -213,7 +213,7 @@ class UserControllerTest {
       whenever(userUse.getAllUsers()).thenReturn(users)
 
       mockMvc
-        .perform(get("/api/v1/users"))
+        .perform(get("/v1/users"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$.length()").value(2))
         .andExpect(jsonPath("$[0].name").value("User 1"))
@@ -241,7 +241,7 @@ class UserControllerTest {
 
       mockMvc
         .perform(
-          put("/api/v1/users/$TEST_ID")
+          put("/v1/users/$TEST_ID")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""{"name": "Updated Name"}"""),
         ).andExpect(status().isOk)
@@ -265,7 +265,7 @@ class UserControllerTest {
 
       mockMvc
         .perform(
-          put("/api/v1/users/$TEST_ID")
+          put("/v1/users/$TEST_ID")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""{"name": "Updated Name"}"""),
         ).andExpect(status().isNotFound)
@@ -280,7 +280,7 @@ class UserControllerTest {
     ) {
       mockMvc
         .perform(
-          put("/api/v1/users/$TEST_ID")
+          put("/v1/users/$TEST_ID")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody),
         ).andExpect(status().isBadRequest)
@@ -292,7 +292,7 @@ class UserControllerTest {
     @Test
     fun `should delete user and return 204`() {
       mockMvc
-        .perform(delete("/api/v1/users/$TEST_ID"))
+        .perform(delete("/v1/users/$TEST_ID"))
         .andExpect(status().isNoContent)
 
       verify(userUse).deleteUser(TEST_ID)
@@ -303,7 +303,7 @@ class UserControllerTest {
       whenever(userUse.deleteUser(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
 
       mockMvc
-        .perform(delete("/api/v1/users/$TEST_ID"))
+        .perform(delete("/v1/users/$TEST_ID"))
         .andExpect(status().isNotFound)
     }
   }
