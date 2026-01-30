@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
@@ -235,7 +234,6 @@ class UserControllerTest {
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
           avatarUrl = anyOrNull(),
-          isActive = anyOrNull(),
         ),
       ).thenReturn(updatedUser)
 
@@ -259,7 +257,6 @@ class UserControllerTest {
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
           avatarUrl = anyOrNull(),
-          isActive = anyOrNull(),
         ),
       ).thenThrow(EntityNotFoundException("User", TEST_ID))
 
@@ -288,22 +285,26 @@ class UserControllerTest {
   }
 
   @Nested
-  inner class DeleteUser {
+  inner class DeactivateUser {
     @Test
-    fun `should delete user and return 204`() {
-      mockMvc
-        .perform(delete("/v1/users/$TEST_ID"))
-        .andExpect(status().isNoContent)
+    fun `should deactivate user and return 200`() {
+      val deactivatedUser = createTestUser(isActive = false)
+      whenever(userUse.deactivateUser(TEST_ID)).thenReturn(deactivatedUser)
 
-      verify(userUse).deleteUser(TEST_ID)
+      mockMvc
+        .perform(post("/v1/users/$TEST_ID/deactivate"))
+        .andExpect(status().isOk)
+        .andExpect(jsonPath("$.isActive").value(false))
+
+      verify(userUse).deactivateUser(TEST_ID)
     }
 
     @Test
-    fun `should return 404 when deleting non-existent user`() {
-      whenever(userUse.deleteUser(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
+    fun `should return 404 when deactivating non-existent user`() {
+      whenever(userUse.deactivateUser(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
 
       mockMvc
-        .perform(delete("/v1/users/$TEST_ID"))
+        .perform(post("/v1/users/$TEST_ID/deactivate"))
         .andExpect(status().isNotFound)
     }
   }

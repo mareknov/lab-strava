@@ -20,6 +20,4 @@ data class UpdateUserRequest(
 
   @field:Size(max = 2048, message = "Avatar URL must be at most 2048 characters")
   val avatarUrl: String? = null,
-
-  val isActive: Boolean? = null,
 )

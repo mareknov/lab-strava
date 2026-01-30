@@ -60,7 +60,6 @@ class UserService(
     lastName: String?,
     stravaId: Long?,
     avatarUrl: String?,
-    isActive: Boolean?,
   ): User {
     val entity =
       userRepository
@@ -80,16 +79,20 @@ class UserService(
     lastName?.let { entity.lastName = it }
     stravaId?.let { entity.stravaId = it }
     avatarUrl?.let { entity.avatarUrl = it }
-    isActive?.let { entity.isActive = it }
     entity.updatedAt = Instant.now()
 
     return userRepository.save(entity).toDomain()
   }
 
-  override fun deleteUser(id: UUID) {
-    if (!userRepository.existsById(id)) {
-      throw EntityNotFoundException("User", id)
-    }
-    userRepository.deleteById(id)
+  override fun deactivateUser(id: UUID): User {
+    val entity =
+      userRepository
+        .findById(id)
+        .orElseThrow { EntityNotFoundException("User", id) }
+
+    entity.isActive = false
+    entity.updatedAt = Instant.now()
+
+    return userRepository.save(entity).toDomain()
   }
 }

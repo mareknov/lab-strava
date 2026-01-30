@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -17,6 +15,7 @@ import org.mockito.kotlin.whenever
 import java.util.Optional
 import java.util.UUID
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -235,45 +234,34 @@ class UserServiceTest {
 
       assertEquals("User", exception.entityType)
     }
-
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `should update isActive status`(isActive: Boolean) {
-      val id = UUID.randomUUID()
-      val entity = UserEntity(id = id, name = "Test", email = "test@example.com", isActive = !isActive)
-      whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
-      whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
-
-      val user = userService.updateUser(id = id, isActive = isActive)
-
-      assertEquals(isActive, user.isActive)
-    }
   }
 
   @Nested
-  inner class DeleteUser {
+  inner class DeactivateUser {
     @Test
-    fun `should delete user when exists`() {
+    fun `should deactivate user and return updated user`() {
       val id = UUID.randomUUID()
-      whenever(userRepository.existsById(id)).thenReturn(true)
+      val entity = UserEntity(id = id, name = "Test", email = "test@example.com", isActive = true)
+      whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
+      whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
 
-      userService.deleteUser(id)
+      val user = userService.deactivateUser(id)
 
-      verify(userRepository).deleteById(id)
+      assertFalse(user.isActive)
+      verify(userRepository).save(any())
     }
 
     @Test
     fun `should throw EntityNotFoundException when user not found`() {
       val id = UUID.randomUUID()
-      whenever(userRepository.existsById(id)).thenReturn(false)
+      whenever(userRepository.findById(id)).thenReturn(Optional.empty())
 
       val exception =
         assertThrows<EntityNotFoundException> {
-          userService.deleteUser(id)
+          userService.deactivateUser(id)
         }
 
       assertEquals("User", exception.entityType)
-      verify(userRepository, never()).deleteById(any())
     }
   }
 }

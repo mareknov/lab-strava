@@ -8,7 +8,6 @@ import com.lab.strava.domain.user.validation.UserValidation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -69,16 +68,15 @@ class UserController(
         lastName = request.lastName,
         stravaId = request.stravaId,
         avatarUrl = request.avatarUrl,
-        isActive = request.isActive,
       )
     return ResponseEntity.ok(UserResponse.fromDomain(user))
   }
 
-  @DeleteMapping("/{id}")
-  fun deleteUser(
+  @PostMapping("/{id}/deactivate")
+  fun deactivateUser(
     @PathVariable id: UUID,
-  ): ResponseEntity<Unit> {
-    userUse.deleteUser(id)
-    return ResponseEntity.noContent().build()
+  ): ResponseEntity<UserResponse> {
+    val user = userUse.deactivateUser(id)
+    return ResponseEntity.ok(UserResponse.fromDomain(user))
   }
 }

@@ -24,8 +24,7 @@ interface UserUse {
     lastName: String? = null,
     stravaId: Long? = null,
     avatarUrl: String? = null,
-    isActive: Boolean? = null,
   ): User
 
-  fun deleteUser(id: UUID)
+  fun deactivateUser(id: UUID): User
 }
