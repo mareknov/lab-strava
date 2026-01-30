@@ -100,6 +100,7 @@ domain/{feature}/
 ### Testing
 
 - Primarily use unit tests
+- Do not test data classes and DTOs
 - Test controllers with `@WebMvcTest`
 - Test edge cases and error handling
 
