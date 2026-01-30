@@ -63,6 +63,7 @@ Model package MUST NOT contain SpringBoot specific annotations.
 
 - Branching: follow the pattern `iteration_{iterationNumber}`
 - No force-push to shared branches; create PRs for code review.
+- Do NOT add "Co-Authored-By" lines to commit messages
 
 ## Code style guidelines (for agents)
 
