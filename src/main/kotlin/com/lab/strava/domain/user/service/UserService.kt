@@ -13,16 +13,15 @@ import java.util.UUID
 @Service
 @Transactional
 class UserService(
-  private val userRepository: UserRepository
+  private val userRepository: UserRepository,
 ) : UserUse {
-
   override fun createUser(
     name: String,
     email: String,
     firstName: String?,
     lastName: String?,
     stravaId: Long?,
-    avatarUrl: String?
+    avatarUrl: String?,
   ): User {
     if (userRepository.existsByEmail(email)) {
       throw IllegalArgumentException("User with email '$email' already exists")
@@ -31,28 +30,27 @@ class UserService(
       throw IllegalArgumentException("User with Strava ID '$stravaId' already exists")
     }
 
-    val entity = UserEntity(
-      name = name,
-      email = email,
-      firstName = firstName,
-      lastName = lastName,
-      stravaId = stravaId,
-      avatarUrl = avatarUrl
-    )
+    val entity =
+      UserEntity(
+        name = name,
+        email = email,
+        firstName = firstName,
+        lastName = lastName,
+        stravaId = stravaId,
+        avatarUrl = avatarUrl,
+      )
     return userRepository.save(entity).toDomain()
   }
 
   @Transactional(readOnly = true)
-  override fun getUserById(id: UUID): User {
-    return userRepository.findById(id)
+  override fun getUserById(id: UUID): User =
+    userRepository
+      .findById(id)
       .orElseThrow { EntityNotFoundException("User", id) }
       .toDomain()
-  }
 
   @Transactional(readOnly = true)
-  override fun getAllUsers(): List<User> {
-    return userRepository.findAll().map { it.toDomain() }
-  }
+  override fun getAllUsers(): List<User> = userRepository.findAll().map { it.toDomain() }
 
   override fun updateUser(
     id: UUID,
@@ -62,10 +60,12 @@ class UserService(
     lastName: String?,
     stravaId: Long?,
     avatarUrl: String?,
-    isActive: Boolean?
+    isActive: Boolean?,
   ): User {
-    val entity = userRepository.findById(id)
-      .orElseThrow { EntityNotFoundException("User", id) }
+    val entity =
+      userRepository
+        .findById(id)
+        .orElseThrow { EntityNotFoundException("User", id) }
 
     if (email != null && email != entity.email && userRepository.existsByEmail(email)) {
       throw IllegalArgumentException("User with email '$email' already exists")

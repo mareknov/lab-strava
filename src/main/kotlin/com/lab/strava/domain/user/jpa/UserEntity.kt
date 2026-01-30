@@ -39,33 +39,35 @@ class UserEntity(
   val createdAt: Instant = Instant.now(),
 
   @Column(name = "updated_at", nullable = false)
-  var updatedAt: Instant = Instant.now()
+  var updatedAt: Instant = Instant.now(),
 ) {
-  fun toDomain(): User = User(
-    id = id,
-    name = name,
-    email = email,
-    firstName = firstName,
-    lastName = lastName,
-    stravaId = stravaId,
-    avatarUrl = avatarUrl,
-    isActive = isActive,
-    createdAt = createdAt,
-    updatedAt = updatedAt
-  )
+  fun toDomain(): User =
+    User(
+      id = id,
+      name = name,
+      email = email,
+      firstName = firstName,
+      lastName = lastName,
+      stravaId = stravaId,
+      avatarUrl = avatarUrl,
+      isActive = isActive,
+      createdAt = createdAt,
+      updatedAt = updatedAt,
+    )
 
   companion object {
-    fun fromDomain(user: User): UserEntity = UserEntity(
-      id = user.id,
-      name = user.name,
-      email = user.email,
-      firstName = user.firstName,
-      lastName = user.lastName,
-      stravaId = user.stravaId,
-      avatarUrl = user.avatarUrl,
-      isActive = user.isActive,
-      createdAt = user.createdAt,
-      updatedAt = user.updatedAt
-    )
+    fun fromDomain(user: User): UserEntity =
+      UserEntity(
+        id = user.id,
+        name = user.name,
+        email = user.email,
+        firstName = user.firstName,
+        lastName = user.lastName,
+        stravaId = user.stravaId,
+        avatarUrl = user.avatarUrl,
+        isActive = user.isActive,
+        createdAt = user.createdAt,
+        updatedAt = user.updatedAt,
+      )
   }
 }

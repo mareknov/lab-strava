@@ -14,20 +14,21 @@ data class UserResponse(
   val avatarUrl: String?,
   val isActive: Boolean,
   val createdAt: Instant,
-  val updatedAt: Instant
+  val updatedAt: Instant,
 ) {
   companion object {
-    fun fromDomain(user: User): UserResponse = UserResponse(
-      id = user.id,
-      name = user.name,
-      email = user.email,
-      firstName = user.firstName,
-      lastName = user.lastName,
-      stravaId = user.stravaId,
-      avatarUrl = user.avatarUrl,
-      isActive = user.isActive,
-      createdAt = user.createdAt,
-      updatedAt = user.updatedAt
-    )
+    fun fromDomain(user: User): UserResponse =
+      UserResponse(
+        id = user.id,
+        name = user.name,
+        email = user.email,
+        firstName = user.firstName,
+        lastName = user.lastName,
+        stravaId = user.stravaId,
+        avatarUrl = user.avatarUrl,
+        isActive = user.isActive,
+        createdAt = user.createdAt,
+        updatedAt = user.updatedAt,
+      )
   }
 }

@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
-
   @ExceptionHandler(EntityNotFoundException::class)
-  fun handleEntityNotFound(ex: EntityNotFoundException): ProblemDetail {
-    return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message ?: "Entity not found").apply {
+  fun handleEntityNotFound(ex: EntityNotFoundException): ProblemDetail =
+    ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message ?: "Entity not found").apply {
       title = "Entity Not Found"
       setProperty("entityType", ex.entityType)
       setProperty("entityId", ex.entityId.toString())
     }
-  }
 
   @ExceptionHandler(MethodArgumentNotValidException::class)
   fun handleValidation(ex: MethodArgumentNotValidException): ProblemDetail {
@@ -28,9 +26,8 @@ class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(IllegalArgumentException::class)
-  fun handleIllegalArgument(ex: IllegalArgumentException): ProblemDetail {
-    return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message ?: "Invalid argument").apply {
+  fun handleIllegalArgument(ex: IllegalArgumentException): ProblemDetail =
+    ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message ?: "Invalid argument").apply {
       title = "Bad Request"
     }
-  }
 }

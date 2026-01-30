@@ -4,7 +4,6 @@ import com.lab.strava.domain.user.dto.CreateUserRequest
 import com.lab.strava.domain.user.dto.UpdateUserRequest
 
 object UserValidation {
-
   fun validateCreateRequest(request: CreateUserRequest) {
     validateEmail(request.email)
     request.avatarUrl?.let { validateUrl(it, "avatarUrl") }
@@ -22,7 +21,10 @@ object UserValidation {
     }
   }
 
-  private fun validateUrl(url: String, fieldName: String) {
+  private fun validateUrl(
+    url: String,
+    fieldName: String,
+  ) {
     if (url.isNotBlank() && !url.startsWith("http://") && !url.startsWith("https://")) {
       throw IllegalArgumentException("$fieldName must be a valid HTTP or HTTPS URL")
     }

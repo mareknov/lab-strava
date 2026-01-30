@@ -21,7 +21,6 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class UserServiceTest {
-
   private lateinit var userRepository: UserRepository
   private lateinit var userService: UserService
 
@@ -33,29 +32,30 @@ class UserServiceTest {
 
   @Nested
   inner class CreateUser {
-
     @Test
     fun `should create user with all fields`() {
-      val savedEntity = UserEntity(
-        name = "John Doe",
-        email = "john@example.com",
-        firstName = "John",
-        lastName = "Doe",
-        stravaId = 12345L,
-        avatarUrl = "https://example.com/avatar.jpg"
-      )
+      val savedEntity =
+        UserEntity(
+          name = "John Doe",
+          email = "john@example.com",
+          firstName = "John",
+          lastName = "Doe",
+          stravaId = 12345L,
+          avatarUrl = "https://example.com/avatar.jpg",
+        )
       whenever(userRepository.existsByEmail("john@example.com")).thenReturn(false)
       whenever(userRepository.existsByStravaId(12345L)).thenReturn(false)
       whenever(userRepository.save(any<UserEntity>())).thenReturn(savedEntity)
 
-      val user = userService.createUser(
-        name = "John Doe",
-        email = "john@example.com",
-        firstName = "John",
-        lastName = "Doe",
-        stravaId = 12345L,
-        avatarUrl = "https://example.com/avatar.jpg"
-      )
+      val user =
+        userService.createUser(
+          name = "John Doe",
+          email = "john@example.com",
+          firstName = "John",
+          lastName = "Doe",
+          stravaId = 12345L,
+          avatarUrl = "https://example.com/avatar.jpg",
+        )
 
       assertNotNull(user)
       assertEquals("John Doe", user.name)
@@ -73,10 +73,11 @@ class UserServiceTest {
       whenever(userRepository.existsByEmail("jane@example.com")).thenReturn(false)
       whenever(userRepository.save(any<UserEntity>())).thenReturn(savedEntity)
 
-      val user = userService.createUser(
-        name = "Jane Doe",
-        email = "jane@example.com"
-      )
+      val user =
+        userService.createUser(
+          name = "Jane Doe",
+          email = "jane@example.com",
+        )
 
       assertNotNull(user)
       assertEquals("Jane Doe", user.name)
@@ -87,9 +88,10 @@ class UserServiceTest {
     fun `should throw exception when email already exists`() {
       whenever(userRepository.existsByEmail("existing@example.com")).thenReturn(true)
 
-      val exception = assertThrows<IllegalArgumentException> {
-        userService.createUser(name = "Test", email = "existing@example.com")
-      }
+      val exception =
+        assertThrows<IllegalArgumentException> {
+          userService.createUser(name = "Test", email = "existing@example.com")
+        }
 
       assertEquals("User with email 'existing@example.com' already exists", exception.message)
       verify(userRepository, never()).save(any())
@@ -100,9 +102,10 @@ class UserServiceTest {
       whenever(userRepository.existsByEmail(any())).thenReturn(false)
       whenever(userRepository.existsByStravaId(12345L)).thenReturn(true)
 
-      val exception = assertThrows<IllegalArgumentException> {
-        userService.createUser(name = "Test", email = "test@example.com", stravaId = 12345L)
-      }
+      val exception =
+        assertThrows<IllegalArgumentException> {
+          userService.createUser(name = "Test", email = "test@example.com", stravaId = 12345L)
+        }
 
       assertEquals("User with Strava ID '12345' already exists", exception.message)
       verify(userRepository, never()).save(any())
@@ -111,7 +114,6 @@ class UserServiceTest {
 
   @Nested
   inner class GetUserById {
-
     @Test
     fun `should return user when found`() {
       val id = UUID.randomUUID()
@@ -129,9 +131,10 @@ class UserServiceTest {
       val id = UUID.randomUUID()
       whenever(userRepository.findById(id)).thenReturn(Optional.empty())
 
-      val exception = assertThrows<EntityNotFoundException> {
-        userService.getUserById(id)
-      }
+      val exception =
+        assertThrows<EntityNotFoundException> {
+          userService.getUserById(id)
+        }
 
       assertEquals("User", exception.entityType)
       assertEquals(id, exception.entityId)
@@ -140,7 +143,6 @@ class UserServiceTest {
 
   @Nested
   inner class GetAllUsers {
-
     @Test
     fun `should return empty list when no users`() {
       whenever(userRepository.findAll()).thenReturn(emptyList())
@@ -152,10 +154,11 @@ class UserServiceTest {
 
     @Test
     fun `should return all users`() {
-      val entities = listOf(
-        UserEntity(name = "User 1", email = "user1@example.com"),
-        UserEntity(name = "User 2", email = "user2@example.com")
-      )
+      val entities =
+        listOf(
+          UserEntity(name = "User 1", email = "user1@example.com"),
+          UserEntity(name = "User 2", email = "user2@example.com"),
+        )
       whenever(userRepository.findAll()).thenReturn(entities)
 
       val users = userService.getAllUsers()
@@ -168,7 +171,6 @@ class UserServiceTest {
 
   @Nested
   inner class UpdateUser {
-
     @Test
     fun `should update user name`() {
       val id = UUID.randomUUID()
@@ -201,9 +203,10 @@ class UserServiceTest {
       whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
       whenever(userRepository.existsByEmail("taken@example.com")).thenReturn(true)
 
-      val exception = assertThrows<IllegalArgumentException> {
-        userService.updateUser(id = id, email = "taken@example.com")
-      }
+      val exception =
+        assertThrows<IllegalArgumentException> {
+          userService.updateUser(id = id, email = "taken@example.com")
+        }
 
       assertEquals("User with email 'taken@example.com' already exists", exception.message)
     }
@@ -225,9 +228,10 @@ class UserServiceTest {
       val id = UUID.randomUUID()
       whenever(userRepository.findById(id)).thenReturn(Optional.empty())
 
-      val exception = assertThrows<EntityNotFoundException> {
-        userService.updateUser(id = id, name = "New Name")
-      }
+      val exception =
+        assertThrows<EntityNotFoundException> {
+          userService.updateUser(id = id, name = "New Name")
+        }
 
       assertEquals("User", exception.entityType)
     }
@@ -248,7 +252,6 @@ class UserServiceTest {
 
   @Nested
   inner class DeleteUser {
-
     @Test
     fun `should delete user when exists`() {
       val id = UUID.randomUUID()
@@ -264,9 +267,10 @@ class UserServiceTest {
       val id = UUID.randomUUID()
       whenever(userRepository.existsById(id)).thenReturn(false)
 
-      val exception = assertThrows<EntityNotFoundException> {
-        userService.deleteUser(id)
-      }
+      val exception =
+        assertThrows<EntityNotFoundException> {
+          userService.deleteUser(id)
+        }
 
       assertEquals("User", exception.entityType)
       verify(userRepository, never()).deleteById(any())

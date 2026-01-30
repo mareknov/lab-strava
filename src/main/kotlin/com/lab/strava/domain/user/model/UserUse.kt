@@ -9,7 +9,7 @@ interface UserUse {
     firstName: String? = null,
     lastName: String? = null,
     stravaId: Long? = null,
-    avatarUrl: String? = null
+    avatarUrl: String? = null,
   ): User
 
   fun getUserById(id: UUID): User
@@ -24,7 +24,7 @@ interface UserUse {
     lastName: String? = null,
     stravaId: Long? = null,
     avatarUrl: String? = null,
-    isActive: Boolean? = null
+    isActive: Boolean? = null,
   ): User
 
   fun deleteUser(id: UUID)

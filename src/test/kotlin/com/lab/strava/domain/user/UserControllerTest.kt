@@ -33,7 +33,6 @@ import java.util.stream.Stream
 @WebMvcTest(UserController::class)
 @Import(GlobalExceptionHandler::class)
 class UserControllerTest {
-
   @Autowired
   private lateinit var mockMvc: MockMvc
 
@@ -52,7 +51,7 @@ class UserControllerTest {
       lastName: String? = "Doe",
       stravaId: Long? = 12345L,
       avatarUrl: String? = "https://example.com/avatar.jpg",
-      isActive: Boolean = true
+      isActive: Boolean = true,
     ) = User(
       id = id,
       name = name,
@@ -63,26 +62,27 @@ class UserControllerTest {
       avatarUrl = avatarUrl,
       isActive = isActive,
       createdAt = TEST_TIME,
-      updatedAt = TEST_TIME
+      updatedAt = TEST_TIME,
     )
 
     @JvmStatic
-    fun invalidCreateRequests(): Stream<Arguments> = Stream.of(
-      Arguments.of("{}", "name", "Name is required"),
-      Arguments.of("""{"name": ""}""", "name", "Name is required"),
-      Arguments.of("""{"name": "Test"}""", "email", "Email is required"),
-      Arguments.of("""{"name": "Test", "email": "invalid"}""", "email", "Email must be valid")
-    )
+    fun invalidCreateRequests(): Stream<Arguments> =
+      Stream.of(
+        Arguments.of("{}", "name", "Name is required"),
+        Arguments.of("""{"name": ""}""", "name", "Name is required"),
+        Arguments.of("""{"name": "Test"}""", "email", "Email is required"),
+        Arguments.of("""{"name": "Test", "email": "invalid"}""", "email", "Email must be valid"),
+      )
 
     @JvmStatic
-    fun invalidUpdateRequests(): Stream<Arguments> = Stream.of(
-      Arguments.of("""{"email": "invalid"}""", "email", "Email must be valid")
-    )
+    fun invalidUpdateRequests(): Stream<Arguments> =
+      Stream.of(
+        Arguments.of("""{"email": "invalid"}""", "email", "Email must be valid"),
+      )
   }
 
   @Nested
   inner class CreateUser {
-
     @Test
     fun `should create user and return 201`() {
       val user = createTestUser()
@@ -93,27 +93,27 @@ class UserControllerTest {
           firstName = anyOrNull(),
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
-          avatarUrl = anyOrNull()
-        )
+          avatarUrl = anyOrNull(),
+        ),
       ).thenReturn(user)
 
-      mockMvc.perform(
-        post("/api/v1/users")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(
-            """
-            {
-              "name": "John Doe",
-              "email": "john@example.com",
-              "firstName": "John",
-              "lastName": "Doe",
-              "stravaId": 12345,
-              "avatarUrl": "https://example.com/avatar.jpg"
-            }
-            """.trimIndent()
-          )
-      )
-        .andExpect(status().isCreated)
+      mockMvc
+        .perform(
+          post("/api/v1/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(
+              """
+              {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "firstName": "John",
+                "lastName": "Doe",
+                "stravaId": 12345,
+                "avatarUrl": "https://example.com/avatar.jpg"
+              }
+              """.trimIndent(),
+            ),
+        ).andExpect(status().isCreated)
         .andExpect(jsonPath("$.id").value(TEST_ID.toString()))
         .andExpect(jsonPath("$.name").value("John Doe"))
         .andExpect(jsonPath("$.email").value("john@example.com"))
@@ -134,16 +134,16 @@ class UserControllerTest {
           firstName = anyOrNull(),
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
-          avatarUrl = anyOrNull()
-        )
+          avatarUrl = anyOrNull(),
+        ),
       ).thenReturn(user)
 
-      mockMvc.perform(
-        post("/api/v1/users")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content("""{"name": "John Doe", "email": "john@example.com"}""")
-      )
-        .andExpect(status().isCreated)
+      mockMvc
+        .perform(
+          post("/api/v1/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""{"name": "John Doe", "email": "john@example.com"}"""),
+        ).andExpect(status().isCreated)
         .andExpect(jsonPath("$.name").value("John Doe"))
         .andExpect(jsonPath("$.email").value("john@example.com"))
     }
@@ -153,26 +153,26 @@ class UserControllerTest {
     fun `should return 400 for invalid create request`(
       requestBody: String,
       expectedField: String,
-      expectedMessage: String
+      expectedMessage: String,
     ) {
-      mockMvc.perform(
-        post("/api/v1/users")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(requestBody)
-      )
-        .andExpect(status().isBadRequest)
+      mockMvc
+        .perform(
+          post("/api/v1/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody),
+        ).andExpect(status().isBadRequest)
     }
   }
 
   @Nested
   inner class GetUserById {
-
     @Test
     fun `should return user when found`() {
       val user = createTestUser()
       whenever(userUse.getUserById(TEST_ID)).thenReturn(user)
 
-      mockMvc.perform(get("/api/v1/users/$TEST_ID"))
+      mockMvc
+        .perform(get("/api/v1/users/$TEST_ID"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$.id").value(TEST_ID.toString()))
         .andExpect(jsonPath("$.name").value("John Doe"))
@@ -182,7 +182,8 @@ class UserControllerTest {
     fun `should return 404 when user not found`() {
       whenever(userUse.getUserById(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
 
-      mockMvc.perform(get("/api/v1/users/$TEST_ID"))
+      mockMvc
+        .perform(get("/api/v1/users/$TEST_ID"))
         .andExpect(status().isNotFound)
         .andExpect(jsonPath("$.title").value("Entity Not Found"))
         .andExpect(jsonPath("$.entityType").value("User"))
@@ -191,12 +192,12 @@ class UserControllerTest {
 
   @Nested
   inner class GetAllUsers {
-
     @Test
     fun `should return empty list when no users`() {
       whenever(userUse.getAllUsers()).thenReturn(emptyList())
 
-      mockMvc.perform(get("/api/v1/users"))
+      mockMvc
+        .perform(get("/api/v1/users"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$").isArray)
         .andExpect(jsonPath("$.length()").value(0))
@@ -204,13 +205,15 @@ class UserControllerTest {
 
     @Test
     fun `should return all users`() {
-      val users = listOf(
-        createTestUser(id = UUID.randomUUID(), name = "User 1", email = "user1@example.com"),
-        createTestUser(id = UUID.randomUUID(), name = "User 2", email = "user2@example.com")
-      )
+      val users =
+        listOf(
+          createTestUser(id = UUID.randomUUID(), name = "User 1", email = "user1@example.com"),
+          createTestUser(id = UUID.randomUUID(), name = "User 2", email = "user2@example.com"),
+        )
       whenever(userUse.getAllUsers()).thenReturn(users)
 
-      mockMvc.perform(get("/api/v1/users"))
+      mockMvc
+        .perform(get("/api/v1/users"))
         .andExpect(status().isOk)
         .andExpect(jsonPath("$.length()").value(2))
         .andExpect(jsonPath("$[0].name").value("User 1"))
@@ -220,7 +223,6 @@ class UserControllerTest {
 
   @Nested
   inner class UpdateUser {
-
     @Test
     fun `should update user and return 200`() {
       val updatedUser = createTestUser(name = "Updated Name")
@@ -233,16 +235,16 @@ class UserControllerTest {
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
           avatarUrl = anyOrNull(),
-          isActive = anyOrNull()
-        )
+          isActive = anyOrNull(),
+        ),
       ).thenReturn(updatedUser)
 
-      mockMvc.perform(
-        put("/api/v1/users/$TEST_ID")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content("""{"name": "Updated Name"}""")
-      )
-        .andExpect(status().isOk)
+      mockMvc
+        .perform(
+          put("/api/v1/users/$TEST_ID")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""{"name": "Updated Name"}"""),
+        ).andExpect(status().isOk)
         .andExpect(jsonPath("$.name").value("Updated Name"))
     }
 
@@ -257,16 +259,16 @@ class UserControllerTest {
           lastName = anyOrNull(),
           stravaId = anyOrNull(),
           avatarUrl = anyOrNull(),
-          isActive = anyOrNull()
-        )
+          isActive = anyOrNull(),
+        ),
       ).thenThrow(EntityNotFoundException("User", TEST_ID))
 
-      mockMvc.perform(
-        put("/api/v1/users/$TEST_ID")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content("""{"name": "Updated Name"}""")
-      )
-        .andExpect(status().isNotFound)
+      mockMvc
+        .perform(
+          put("/api/v1/users/$TEST_ID")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""{"name": "Updated Name"}"""),
+        ).andExpect(status().isNotFound)
     }
 
     @ParameterizedTest
@@ -274,23 +276,23 @@ class UserControllerTest {
     fun `should return 400 for invalid update request`(
       requestBody: String,
       expectedField: String,
-      expectedMessage: String
+      expectedMessage: String,
     ) {
-      mockMvc.perform(
-        put("/api/v1/users/$TEST_ID")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(requestBody)
-      )
-        .andExpect(status().isBadRequest)
+      mockMvc
+        .perform(
+          put("/api/v1/users/$TEST_ID")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody),
+        ).andExpect(status().isBadRequest)
     }
   }
 
   @Nested
   inner class DeleteUser {
-
     @Test
     fun `should delete user and return 204`() {
-      mockMvc.perform(delete("/api/v1/users/$TEST_ID"))
+      mockMvc
+        .perform(delete("/api/v1/users/$TEST_ID"))
         .andExpect(status().isNoContent)
 
       verify(userUse).deleteUser(TEST_ID)
@@ -300,7 +302,8 @@ class UserControllerTest {
     fun `should return 404 when deleting non-existent user`() {
       whenever(userUse.deleteUser(TEST_ID)).thenThrow(EntityNotFoundException("User", TEST_ID))
 
-      mockMvc.perform(delete("/api/v1/users/$TEST_ID"))
+      mockMvc
+        .perform(delete("/api/v1/users/$TEST_ID"))
         .andExpect(status().isNotFound)
     }
   }
