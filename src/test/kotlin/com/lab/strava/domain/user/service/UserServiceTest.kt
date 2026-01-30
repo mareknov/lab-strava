@@ -1,6 +1,8 @@
 package com.lab.strava.domain.user.service
 
 import com.lab.strava.common.exception.EntityNotFoundException
+import com.lab.strava.domain.user.dto.CreateUserRequest
+import com.lab.strava.domain.user.dto.UpdateUserRequest
 import com.lab.strava.domain.user.jpa.UserEntity
 import com.lab.strava.domain.user.jpa.UserRepository
 import org.junit.jupiter.api.BeforeEach
@@ -46,8 +48,8 @@ class UserServiceTest {
       whenever(userRepository.existsByStravaId(12345L)).thenReturn(false)
       whenever(userRepository.save(any<UserEntity>())).thenReturn(savedEntity)
 
-      val user =
-        userService.createUser(
+      val request =
+        CreateUserRequest(
           name = "John Doe",
           email = "john@example.com",
           firstName = "John",
@@ -55,6 +57,7 @@ class UserServiceTest {
           stravaId = 12345L,
           avatarUrl = "https://example.com/avatar.jpg",
         )
+      val user = userService.createUser(request)
 
       assertNotNull(user)
       assertEquals("John Doe", user.name)
@@ -72,11 +75,8 @@ class UserServiceTest {
       whenever(userRepository.existsByEmail("jane@example.com")).thenReturn(false)
       whenever(userRepository.save(any<UserEntity>())).thenReturn(savedEntity)
 
-      val user =
-        userService.createUser(
-          name = "Jane Doe",
-          email = "jane@example.com",
-        )
+      val request = CreateUserRequest(name = "Jane Doe", email = "jane@example.com")
+      val user = userService.createUser(request)
 
       assertNotNull(user)
       assertEquals("Jane Doe", user.name)
@@ -87,9 +87,10 @@ class UserServiceTest {
     fun `should throw exception when email already exists`() {
       whenever(userRepository.existsByEmail("existing@example.com")).thenReturn(true)
 
+      val request = CreateUserRequest(name = "Test", email = "existing@example.com")
       val exception =
         assertThrows<IllegalArgumentException> {
-          userService.createUser(name = "Test", email = "existing@example.com")
+          userService.createUser(request)
         }
 
       assertEquals("User with email 'existing@example.com' already exists", exception.message)
@@ -101,9 +102,10 @@ class UserServiceTest {
       whenever(userRepository.existsByEmail(any())).thenReturn(false)
       whenever(userRepository.existsByStravaId(12345L)).thenReturn(true)
 
+      val request = CreateUserRequest(name = "Test", email = "test@example.com", stravaId = 12345L)
       val exception =
         assertThrows<IllegalArgumentException> {
-          userService.createUser(name = "Test", email = "test@example.com", stravaId = 12345L)
+          userService.createUser(request)
         }
 
       assertEquals("User with Strava ID '12345' already exists", exception.message)
@@ -177,7 +179,8 @@ class UserServiceTest {
       whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
       whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
 
-      val user = userService.updateUser(id = id, name = "New Name")
+      val request = UpdateUserRequest(name = "New Name")
+      val user = userService.updateUser(id, request)
 
       assertEquals("New Name", user.name)
     }
@@ -190,7 +193,8 @@ class UserServiceTest {
       whenever(userRepository.existsByEmail("new@example.com")).thenReturn(false)
       whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
 
-      val user = userService.updateUser(id = id, email = "new@example.com")
+      val request = UpdateUserRequest(email = "new@example.com")
+      val user = userService.updateUser(id, request)
 
       assertEquals("new@example.com", user.email)
     }
@@ -202,9 +206,10 @@ class UserServiceTest {
       whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
       whenever(userRepository.existsByEmail("taken@example.com")).thenReturn(true)
 
+      val request = UpdateUserRequest(email = "taken@example.com")
       val exception =
         assertThrows<IllegalArgumentException> {
-          userService.updateUser(id = id, email = "taken@example.com")
+          userService.updateUser(id, request)
         }
 
       assertEquals("User with email 'taken@example.com' already exists", exception.message)
@@ -217,7 +222,8 @@ class UserServiceTest {
       whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
       whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
 
-      val user = userService.updateUser(id = id, email = "same@example.com")
+      val request = UpdateUserRequest(email = "same@example.com")
+      val user = userService.updateUser(id, request)
 
       assertEquals("same@example.com", user.email)
     }
@@ -227,9 +233,10 @@ class UserServiceTest {
       val id = UUID.randomUUID()
       whenever(userRepository.findById(id)).thenReturn(Optional.empty())
 
+      val request = UpdateUserRequest(name = "New Name")
       val exception =
         assertThrows<EntityNotFoundException> {
-          userService.updateUser(id = id, name = "New Name")
+          userService.updateUser(id, request)
         }
 
       assertEquals("User", exception.entityType)

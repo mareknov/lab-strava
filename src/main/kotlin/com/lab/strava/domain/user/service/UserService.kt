@@ -1,6 +1,8 @@
 package com.lab.strava.domain.user.service
 
 import com.lab.strava.common.exception.EntityNotFoundException
+import com.lab.strava.domain.user.dto.CreateUserRequest
+import com.lab.strava.domain.user.dto.UpdateUserRequest
 import com.lab.strava.domain.user.jpa.UserEntity
 import com.lab.strava.domain.user.jpa.UserRepository
 import com.lab.strava.domain.user.model.User
@@ -15,29 +17,22 @@ import java.util.UUID
 class UserService(
   private val userRepository: UserRepository,
 ) : UserUse {
-  override fun createUser(
-    name: String,
-    email: String,
-    firstName: String?,
-    lastName: String?,
-    stravaId: Long?,
-    avatarUrl: String?,
-  ): User {
-    if (userRepository.existsByEmail(email)) {
-      throw IllegalArgumentException("User with email '$email' already exists")
+  override fun createUser(request: CreateUserRequest): User {
+    if (userRepository.existsByEmail(request.email)) {
+      throw IllegalArgumentException("User with email '${request.email}' already exists")
     }
-    if (stravaId != null && userRepository.existsByStravaId(stravaId)) {
-      throw IllegalArgumentException("User with Strava ID '$stravaId' already exists")
+    if (request.stravaId != null && userRepository.existsByStravaId(request.stravaId)) {
+      throw IllegalArgumentException("User with Strava ID '${request.stravaId}' already exists")
     }
 
     val entity =
       UserEntity(
-        name = name,
-        email = email,
-        firstName = firstName,
-        lastName = lastName,
-        stravaId = stravaId,
-        avatarUrl = avatarUrl,
+        name = request.name,
+        email = request.email,
+        firstName = request.firstName,
+        lastName = request.lastName,
+        stravaId = request.stravaId,
+        avatarUrl = request.avatarUrl,
       )
     return userRepository.save(entity).toDomain()
   }
@@ -54,31 +49,28 @@ class UserService(
 
   override fun updateUser(
     id: UUID,
-    name: String?,
-    email: String?,
-    firstName: String?,
-    lastName: String?,
-    stravaId: Long?,
-    avatarUrl: String?,
+    request: UpdateUserRequest,
   ): User {
     val entity =
       userRepository
         .findById(id)
         .orElseThrow { EntityNotFoundException("User", id) }
 
-    if (email != null && email != entity.email && userRepository.existsByEmail(email)) {
-      throw IllegalArgumentException("User with email '$email' already exists")
+    if (request.email != null && request.email != entity.email && userRepository.existsByEmail(request.email)) {
+      throw IllegalArgumentException("User with email '${request.email}' already exists")
     }
-    if (stravaId != null && stravaId != entity.stravaId && userRepository.existsByStravaId(stravaId)) {
-      throw IllegalArgumentException("User with Strava ID '$stravaId' already exists")
+    if (request.stravaId != null && request.stravaId != entity.stravaId &&
+      userRepository.existsByStravaId(request.stravaId)
+    ) {
+      throw IllegalArgumentException("User with Strava ID '${request.stravaId}' already exists")
     }
 
-    name?.let { entity.name = it }
-    email?.let { entity.email = it }
-    firstName?.let { entity.firstName = it }
-    lastName?.let { entity.lastName = it }
-    stravaId?.let { entity.stravaId = it }
-    avatarUrl?.let { entity.avatarUrl = it }
+    request.name?.let { entity.name = it }
+    request.email?.let { entity.email = it }
+    request.firstName?.let { entity.firstName = it }
+    request.lastName?.let { entity.lastName = it }
+    request.stravaId?.let { entity.stravaId = it }
+    request.avatarUrl?.let { entity.avatarUrl = it }
     entity.updatedAt = Instant.now()
 
     return userRepository.save(entity).toDomain()

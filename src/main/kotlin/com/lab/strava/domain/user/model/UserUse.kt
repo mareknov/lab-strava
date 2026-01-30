@@ -1,16 +1,11 @@
 package com.lab.strava.domain.user.model
 
+import com.lab.strava.domain.user.dto.CreateUserRequest
+import com.lab.strava.domain.user.dto.UpdateUserRequest
 import java.util.UUID
 
 interface UserUse {
-  fun createUser(
-    name: String,
-    email: String,
-    firstName: String? = null,
-    lastName: String? = null,
-    stravaId: Long? = null,
-    avatarUrl: String? = null,
-  ): User
+  fun createUser(request: CreateUserRequest): User
 
   fun getUserById(id: UUID): User
 
@@ -18,12 +13,7 @@ interface UserUse {
 
   fun updateUser(
     id: UUID,
-    name: String? = null,
-    email: String? = null,
-    firstName: String? = null,
-    lastName: String? = null,
-    stravaId: Long? = null,
-    avatarUrl: String? = null,
+    request: UpdateUserRequest,
   ): User
 
   fun deactivateUser(id: UUID): User

@@ -31,7 +31,7 @@ Kotlin/Spring Boot REST API for Strava activity management with RAG and LLM inte
 Each feature in `domain` follows this structure:
 ```
 domain/{feature}/
-├── dto/           # Data transfer objects
+├── dto/           # Data transfer objects (requests, responses)
 ├── jpa/           # JPA entities and repositories
 ├── model/         # Domain models and adapter interfaces (NO Spring annotations)
 ├── service/       # Business logic implementation
@@ -39,12 +39,15 @@ domain/{feature}/
 └── Controller.kt  # REST controller at package root
 ```
 
+**Service Layer Pattern**: Service interfaces use DTOs directly - do NOT create Command/Query classes. The `model/` package contains only domain models and service interfaces.
+
 ## Code Conventions
 
 - **Formatting**: 2-space indents, 120-char max line length (see `.editorconfig`)
 - **Imports**: No wildcard imports; group by stdlib, third-party, project-local
 - **Nullability**: Prefer non-nullable types; use `?` only when necessary
 - **Domain interfaces**: Use `Use` suffix (e.g., `BalanceUse`)
+- **Service DTOs**: Service interfaces accept DTOs directly from `dto` package - do NOT create Command/Query classes
 - **Test names**: Backtick format: `` `should do this and that` ``
 - **Testing**: Use `@ParameterizedTest` when possible; `@WebMvcTest` for controllers
 - **HTTP examples**: Add IntelliJ HTTP client requests in `http/` folder

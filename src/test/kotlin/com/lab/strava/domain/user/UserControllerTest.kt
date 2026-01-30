@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -85,16 +84,7 @@ class UserControllerTest {
     @Test
     fun `should create user and return 201`() {
       val user = createTestUser()
-      whenever(
-        userUse.createUser(
-          name = any(),
-          email = any(),
-          firstName = anyOrNull(),
-          lastName = anyOrNull(),
-          stravaId = anyOrNull(),
-          avatarUrl = anyOrNull(),
-        ),
-      ).thenReturn(user)
+      whenever(userUse.createUser(any())).thenReturn(user)
 
       mockMvc
         .perform(
@@ -126,16 +116,7 @@ class UserControllerTest {
     @Test
     fun `should create user with minimal fields`() {
       val user = createTestUser(firstName = null, lastName = null, stravaId = null, avatarUrl = null)
-      whenever(
-        userUse.createUser(
-          name = any(),
-          email = any(),
-          firstName = anyOrNull(),
-          lastName = anyOrNull(),
-          stravaId = anyOrNull(),
-          avatarUrl = anyOrNull(),
-        ),
-      ).thenReturn(user)
+      whenever(userUse.createUser(any())).thenReturn(user)
 
       mockMvc
         .perform(
@@ -225,17 +206,7 @@ class UserControllerTest {
     @Test
     fun `should update user and return 200`() {
       val updatedUser = createTestUser(name = "Updated Name")
-      whenever(
-        userUse.updateUser(
-          id = eq(TEST_ID),
-          name = anyOrNull(),
-          email = anyOrNull(),
-          firstName = anyOrNull(),
-          lastName = anyOrNull(),
-          stravaId = anyOrNull(),
-          avatarUrl = anyOrNull(),
-        ),
-      ).thenReturn(updatedUser)
+      whenever(userUse.updateUser(eq(TEST_ID), any())).thenReturn(updatedUser)
 
       mockMvc
         .perform(
@@ -248,17 +219,7 @@ class UserControllerTest {
 
     @Test
     fun `should return 404 when updating non-existent user`() {
-      whenever(
-        userUse.updateUser(
-          id = eq(TEST_ID),
-          name = anyOrNull(),
-          email = anyOrNull(),
-          firstName = anyOrNull(),
-          lastName = anyOrNull(),
-          stravaId = anyOrNull(),
-          avatarUrl = anyOrNull(),
-        ),
-      ).thenThrow(EntityNotFoundException("User", TEST_ID))
+      whenever(userUse.updateUser(eq(TEST_ID), any())).thenThrow(EntityNotFoundException("User", TEST_ID))
 
       mockMvc
         .perform(

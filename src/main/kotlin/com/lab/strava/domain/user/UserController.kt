@@ -27,15 +27,7 @@ class UserController(
     @Valid @RequestBody request: CreateUserRequest,
   ): ResponseEntity<UserResponse> {
     UserValidation.validateCreateRequest(request)
-    val user =
-      userUse.createUser(
-        name = request.name,
-        email = request.email,
-        firstName = request.firstName,
-        lastName = request.lastName,
-        stravaId = request.stravaId,
-        avatarUrl = request.avatarUrl,
-      )
+    val user = userUse.createUser(request)
     return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.fromDomain(user))
   }
 
@@ -59,16 +51,7 @@ class UserController(
     @Valid @RequestBody request: UpdateUserRequest,
   ): ResponseEntity<UserResponse> {
     UserValidation.validateUpdateRequest(request)
-    val user =
-      userUse.updateUser(
-        id = id,
-        name = request.name,
-        email = request.email,
-        firstName = request.firstName,
-        lastName = request.lastName,
-        stravaId = request.stravaId,
-        avatarUrl = request.avatarUrl,
-      )
+    val user = userUse.updateUser(id, request)
     return ResponseEntity.ok(UserResponse.fromDomain(user))
   }
 

@@ -38,13 +38,15 @@ Each feature in `domain/` follows this structure:
 
 ```
 domain/{feature}/
-├── dto/           # Data transfer objects
+├── dto/           # Data transfer objects (requests, responses)
 ├── jpa/           # JPA entities and repositories
 ├── model/         # Domain models and adapter interfaces (NO Spring annotations)
 ├── service/       # Business logic implementation
 ├── validation/    # API and service layer validation
 └── Controller.kt  # REST controller at package root
 ```
+
+**Important**: Service interfaces (in `model/`) use DTOs directly as parameters. Do NOT create separate Command/Query classes - the `model/` package should only contain domain models and service interfaces (with `Use` suffix).
 
 ## Build Commands
 
@@ -94,7 +96,8 @@ domain/{feature}/
 ### API Design
 
 - Small methods with single responsibility
-- Prefer object/DTO for methods with many parameters
+- Use DTOs directly in service layer - do NOT create separate Command/Query objects
+- Service interfaces accept DTOs from the `dto` package as parameters
 - Use pure functions where possible (no hidden side-effects)
 
 ### Testing
