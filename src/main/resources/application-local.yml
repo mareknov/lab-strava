@@ -1,0 +1,19 @@
+# NOTE: H2 is currently loaded by default for all profiles due to runtime dependency.
+# This will be changed in a later iteration to use PostgreSQL for non-local profiles.
+spring:
+  datasource:
+    url: jdbc:h2:mem:strava;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
