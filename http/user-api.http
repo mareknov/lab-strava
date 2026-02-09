@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Create user with minimal fields
-POST {{host}}/1/users
+POST {{host}}/v1/users
 Content-Type: application/json
 
 {
