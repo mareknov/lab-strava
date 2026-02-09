@@ -24,7 +24,7 @@ Kotlin/Spring Boot REST API for Strava activity management with RAG and LLM inte
 docker-compose up -d       # Start Postgres
 docker-compose down        # Stop (keeps data)
 docker-compose down -v     # Stop and remove data
-docker logs strava-postgres  # View logs
+docker logs lab-strava-postgres  # View logs
 ```
 
 **Tests:** H2 in-memory (automatic, no setup needed)
