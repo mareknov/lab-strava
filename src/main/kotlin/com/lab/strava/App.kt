@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class LabStravaApplication
+class App
 
 fun main(args: Array<String>) {
-    runApplication<LabStravaApplication>(*args)
+  runApplication<App>(*args)
 }

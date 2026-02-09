@@ -1,0 +1,50 @@
+@host = http://localhost:8080/api
+
+### Create user with all fields
+POST {{host}}/v1/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "stravaId": 12345,
+  "avatarUrl": "https://example.com/avatar.jpg"
+}
+
+### Create user with minimal fields
+POST {{host}}/v1/users
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com"
+}
+
+### Get user by ID
+GET {{host}}/v1/users/{{userId}}
+
+### Get all users
+GET {{host}}/v1/users
+
+### Update user
+PUT {{host}}/v1/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "John Surname 2",
+  "firstName": "Johnny",
+  "lastName": "Updated"
+}
+
+### Update user email
+PUT {{host}}/v1/users/{{userId}}
+Content-Type: application/json
+
+{
+  "email": "john.updated@example.com"
+}
+
+### Deactivate user
+POST {{host}}/v1/users/{{userId}}/deactivate
