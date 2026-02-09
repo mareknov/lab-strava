@@ -269,6 +269,7 @@ class UserServiceTest {
       val user = userService.updateUser(id, request)
 
       assertEquals(12345L, user.stravaId)
+      verify(userRepository, never()).existsByStravaId(any())
     }
 
     @Test
