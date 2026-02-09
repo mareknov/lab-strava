@@ -17,6 +17,34 @@ Kotlin/Spring Boot REST API for Strava activity management with RAG and LLM inte
 ./gradlew ktlintFormat   # Auto-format code
 ```
 
+## Database Setup
+
+**Local/Dev:** PostgreSQL via Docker Compose
+```bash
+docker-compose up -d       # Start Postgres
+docker-compose down        # Stop (keeps data)
+docker-compose down -v     # Stop and remove data
+docker logs strava-postgres  # View logs
+```
+
+**Tests:** H2 in-memory (automatic, no setup needed)
+
+**Migrations:** Liquibase with SQL format
+- Master: `src/main/resources/db/changelog/db.changelog-master.yaml`
+- Schema changes: `src/main/resources/db/changelog/changes/v*.sql`
+- Sample data: `src/main/resources/db/changelog/data/v*.sql`
+
+**Database Access:**
+```bash
+# Connect to Postgres
+docker exec -it strava-postgres psql -U lab_strava_user -d lab_strava_db
+
+# Useful commands
+\dt              # List tables
+\d users         # Describe users table
+\q               # Quit
+```
+
 ## Architecture
 
 **Hexagonal architecture** with strict package organization under `com.lab.strava`:

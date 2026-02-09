@@ -5,22 +5,18 @@ spring:
     password: lab_strava_pass
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 5
-      minimum-idle: 2
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 5
 
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    contexts: local
+    contexts: dev
     enabled: true
