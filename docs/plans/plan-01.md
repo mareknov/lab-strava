@@ -65,7 +65,7 @@ com.lab.strava/
 | GET | `/api/v1/users/{id}` | Get user by ID |
 | GET | `/api/v1/users` | Get all users |
 | PUT | `/api/v1/users/{id}` | Update user |
-| POST | `/v1/users/{id}/deactivate` | Deactivate (soft delete) user |
+| POST | `/api/v1/users/{id}/deactivate` | Deactivate (soft delete) user |
 
 ## Implementation Order
 
