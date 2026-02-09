@@ -26,19 +26,19 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter-restclient")
+  implementation("org.springframework.boot:spring-boot-starter-liquibase")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("tools.jackson.module:jackson-module-kotlin")
 
   runtimeOnly("org.postgresql:postgresql")
-  runtimeOnly("com.h2database:h2")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
   testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
-  testImplementation("com.h2database:h2")
   testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  testRuntimeOnly("com.h2database:h2")
 }
 
 kotlin {
