@@ -6,6 +6,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
+/**
+ * Global exception handler for RESTful API.
+ *
+ * TODO:
+ * fieldErrors.associate { ... } will silently drop additional validation errors for the same field
+ * (e.g., @NotBlank + @Size on name) because later entries overwrite earlier ones.
+ * Consider returning a structure that can represent multiple messages per field (e.g., Map<String, List<String>>)
+ * or otherwise preserving all violations.
+ */
 @RestControllerAdvice
 class GlobalExceptionHandler {
   @ExceptionHandler(EntityNotFoundException::class)
