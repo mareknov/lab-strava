@@ -163,9 +163,9 @@ VALUES
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/strava_db
-    username: strava_user
-    password: strava_pass
+    url: jdbc:postgresql://localhost:5432/lab_strava_db
+    username: lab_strava_user
+    password: lab_strava_pass
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
