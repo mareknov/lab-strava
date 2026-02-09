@@ -67,7 +67,7 @@ domain/{feature}/
 
 ## Key Files
 
-- `AGENT.md` - Detailed development guidelines
+- `AGENTS.md` - Detailed development guidelines
 - `docs/README.md` - Project vision
 - `docs/iterations/` - Iteration requirements
 - `docs/plans/` - Execution plans
