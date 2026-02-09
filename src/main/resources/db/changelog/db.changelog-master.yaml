@@ -4,3 +4,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/data/v001-sample-users.sql
       context: local
+  - include:
+      file: db/changelog/changes/v002-create-activities-table.sql
+  - include:
+      file: db/changelog/data/v002-sample-activities.sql
+      context: local
