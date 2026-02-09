@@ -1,5 +1,7 @@
+@host = http://localhost:8080/api
+
 ### Create user with all fields
-POST http://localhost:8080/api/v1/users
+POST {{host}}/v1/users
 Content-Type: application/json
 
 {
@@ -12,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Create user with minimal fields
-POST http://localhost:8080/api/v1/users
+POST {{host}}/1/users
 Content-Type: application/json
 
 {
@@ -21,23 +23,23 @@ Content-Type: application/json
 }
 
 ### Get user by ID
-GET http://localhost:8080/api/v1/users/{{userId}}
+GET {{host}}/v1/users/{{userId}}
 
 ### Get all users
-GET http://localhost:8080/api/v1/users
+GET {{host}}/v1/users
 
 ### Update user
-PUT http://localhost:8080/api/v1/users/{{userId}}
+PUT {{host}}/v1/users/{{userId}}
 Content-Type: application/json
 
 {
-  "name": "John Updated",
+  "name": "John Surname 2",
   "firstName": "Johnny",
   "lastName": "Updated"
 }
 
 ### Update user email
-PUT http://localhost:8080/api/v1/users/{{userId}}
+PUT {{host}}/v1/users/{{userId}}
 Content-Type: application/json
 
 {
@@ -45,4 +47,4 @@ Content-Type: application/json
 }
 
 ### Deactivate user
-POST http://localhost:8080/api/v1/users/{{userId}}/deactivate
+POST {{host}}/v1/users/{{userId}}/deactivate
