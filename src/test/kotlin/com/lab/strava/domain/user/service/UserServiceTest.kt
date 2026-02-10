@@ -229,6 +229,50 @@ class UserServiceTest {
     }
 
     @Test
+    fun `should update user stravaId when unique`() {
+      val id = UUID.randomUUID()
+      val entity = UserEntity(id = id, name = "Test", email = "test@example.com", stravaId = 11111L)
+      whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
+      whenever(userRepository.existsByStravaId(22222L)).thenReturn(false)
+      whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
+
+      val request = UpdateUserRequest(stravaId = 22222L)
+      val user = userService.updateUser(id, request)
+
+      assertEquals(22222L, user.stravaId)
+    }
+
+    @Test
+    fun `should throw exception when updating to existing stravaId`() {
+      val id = UUID.randomUUID()
+      val entity = UserEntity(id = id, name = "Test", email = "test@example.com", stravaId = 11111L)
+      whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
+      whenever(userRepository.existsByStravaId(99999L)).thenReturn(true)
+
+      val request = UpdateUserRequest(stravaId = 99999L)
+      val exception =
+        assertThrows<IllegalArgumentException> {
+          userService.updateUser(id, request)
+        }
+
+      assertEquals("User with Strava ID '99999' already exists", exception.message)
+    }
+
+    @Test
+    fun `should allow updating to same stravaId`() {
+      val id = UUID.randomUUID()
+      val entity = UserEntity(id = id, name = "Test", email = "test@example.com", stravaId = 12345L)
+      whenever(userRepository.findById(id)).thenReturn(Optional.of(entity))
+      whenever(userRepository.save(any<UserEntity>())).thenAnswer { it.arguments[0] }
+
+      val request = UpdateUserRequest(stravaId = 12345L)
+      val user = userService.updateUser(id, request)
+
+      assertEquals(12345L, user.stravaId)
+      verify(userRepository, never()).existsByStravaId(any())
+    }
+
+    @Test
     fun `should throw EntityNotFoundException when user not found`() {
       val id = UUID.randomUUID()
       whenever(userRepository.findById(id)).thenReturn(Optional.empty())
