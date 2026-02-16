@@ -16,6 +16,12 @@ The project aims to develop a SpringBoot app that:
 - uses embeddings from the local vector database as an input to LLM
 - provides API takes a query from user input, searches RAG and processes the query through LLM
 
+### UX
+
+- user logs-in
+- user is asked to follow OAuth to authorize `lab-strava` app to connect to Strava API
+- 
+
 ### Structure
 
 This folder contains a documentation, iteration steps and plans for Claude Code on how to implement the project.

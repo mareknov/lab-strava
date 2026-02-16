@@ -1,0 +1,10 @@
+.git
+.gradle
+.idea
+build
+infra
+docs
+http
+node_modules
+*.md
+docker-compose.yml
