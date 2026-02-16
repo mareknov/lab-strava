@@ -2,6 +2,7 @@ package com.lab.strava.domain.activity.validation
 
 import com.lab.strava.domain.activity.dto.CreateActivityRequest
 import com.lab.strava.domain.activity.model.ActivityType
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -79,7 +80,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Distance must be >= 0") == true)
+    assertTrue(exception.message!!.contains("Distance must be >= 0"))
   }
 
   @Test
@@ -100,7 +101,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Elapsed time must be > 0") == true)
+    assertTrue(exception.message!!.contains("Elapsed time must be > 0"))
   }
 
   @Test
@@ -121,7 +122,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Moving time must be > 0") == true)
+    assertTrue(exception.message!!.contains("Moving time must be > 0"))
   }
 
   @Test
@@ -142,7 +143,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Moving time must be <= elapsed time") == true)
+    assertTrue(exception.message!!.contains("Moving time must be <= elapsed time"))
   }
 
   @Test
@@ -165,7 +166,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Elevation high must be > elevation low") == true)
+    assertTrue(exception.message!!.contains("Elevation high must be > elevation low"))
   }
 
   @Test
@@ -188,7 +189,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Max speed must be >= average speed") == true)
+    assertTrue(exception.message!!.contains("Max speed must be >= average speed"))
   }
 
   @Test
@@ -210,7 +211,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Average heartrate must be between 0 and 300") == true)
+    assertTrue(exception.message!!.contains("Average heartrate must be between 0 and 300"))
   }
 
   @Test
@@ -232,7 +233,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Average heartrate must be between 0 and 300") == true)
+    assertTrue(exception.message!!.contains("Average heartrate must be between 0 and 300"))
   }
 
   @Test
@@ -254,7 +255,7 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Max heartrate must be between 0 and 300") == true)
+    assertTrue(exception.message!!.contains("Max heartrate must be between 0 and 300"))
   }
 
   @Test
@@ -275,6 +276,6 @@ class ActivityValidationTest {
       assertThrows<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assert(exception.message?.contains("Invalid timezone") == true)
+    assertTrue(exception.message!!.contains("Invalid timezone"))
   }
 }

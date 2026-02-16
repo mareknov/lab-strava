@@ -6,6 +6,9 @@ import com.lab.strava.domain.activity.jpa.ActivityEntity
 import com.lab.strava.domain.activity.jpa.ActivityRepository
 import com.lab.strava.domain.activity.model.Activity
 import com.lab.strava.domain.activity.model.ActivityType
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -21,8 +24,6 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @ExtendWith(MockitoExtension::class)
 class ActivityServiceTest {
@@ -202,8 +203,8 @@ class ActivityServiceTest {
           activityService.getActivityById(activityId)
         }
 
-      assert(exception.message?.contains("Activity") == true)
-      assert(exception.message?.contains(activityId.toString()) == true)
+      assertTrue(exception.message!!.contains("Activity"))
+      assertTrue(exception.message!!.contains(activityId.toString()))
     }
   }
 
