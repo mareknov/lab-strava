@@ -29,11 +29,11 @@ data class CreateActivityRequest(
   val distance: BigDecimal?,
 
   @field:NotNull(message = "Elapsed time is required")
-  @field:Min(value = 0, message = "Elapsed time must be >= 0")
+  @field:Min(value = 1, message = "Elapsed time must be > 0")
   val elapsedTime: Int?,
 
   @field:NotNull(message = "Moving time is required")
-  @field:Min(value = 0, message = "Moving time must be >= 0")
+  @field:Min(value = 1, message = "Moving time must be > 0")
   val movingTime: Int?,
 
   val description: String? = null,
