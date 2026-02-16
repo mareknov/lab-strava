@@ -52,6 +52,10 @@ ktlint {
   version.set("1.8.0")
 }
 
+springBoot {
+  mainClass.set("com.lab.strava.AppKt")
+}
+
 tasks.withType<Test> {
   useJUnitPlatform()
 }
