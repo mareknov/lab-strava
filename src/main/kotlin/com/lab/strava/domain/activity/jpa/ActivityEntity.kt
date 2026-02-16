@@ -20,77 +20,77 @@ class ActivityEntity(
   val id: UUID,
 
   @Column(name = "name", nullable = false)
-  val name: String,
+  var name: String,
 
   @Enumerated(EnumType.STRING)
   @Column(name = "type", nullable = false, length = 50)
-  val type: ActivityType,
+  var type: ActivityType,
 
   @Column(name = "start_date", nullable = false)
-  val startDate: Instant,
+  var startDate: Instant,
 
   @Column(name = "start_date_local", nullable = false)
-  val startDateLocal: Instant,
+  var startDateLocal: Instant,
 
   @Column(name = "timezone", nullable = false)
-  val timezone: String,
+  var timezone: String,
 
   @Column(name = "distance", nullable = false, columnDefinition = "NUMERIC(12,2)")
-  val distance: BigDecimal,
+  var distance: BigDecimal,
 
   @Column(name = "elapsed_time", nullable = false)
-  val elapsedTime: Int,
+  var elapsedTime: Int,
 
   @Column(name = "moving_time", nullable = false)
-  val movingTime: Int,
+  var movingTime: Int,
 
   @Column(name = "description")
-  val description: String? = null,
+  var description: String? = null,
 
   @Column(name = "total_elevation_gain", columnDefinition = "NUMERIC(10,2)")
-  val totalElevationGain: BigDecimal? = null,
+  var totalElevationGain: BigDecimal? = null,
 
   @Column(name = "elev_high", columnDefinition = "NUMERIC(10,2)")
-  val elevHigh: BigDecimal? = null,
+  var elevHigh: BigDecimal? = null,
 
   @Column(name = "elev_low", columnDefinition = "NUMERIC(10,2)")
-  val elevLow: BigDecimal? = null,
+  var elevLow: BigDecimal? = null,
 
   @Column(name = "average_speed", columnDefinition = "NUMERIC(8,4)")
-  val averageSpeed: BigDecimal? = null,
+  var averageSpeed: BigDecimal? = null,
 
   @Column(name = "max_speed", columnDefinition = "NUMERIC(8,4)")
-  val maxSpeed: BigDecimal? = null,
+  var maxSpeed: BigDecimal? = null,
 
   @Column(name = "average_heartrate")
-  val averageHeartrate: Int? = null,
+  var averageHeartrate: Int? = null,
 
   @Column(name = "max_heartrate")
-  val maxHeartrate: Int? = null,
+  var maxHeartrate: Int? = null,
 
   @Column(name = "has_heartrate", nullable = false)
-  val hasHeartrate: Boolean = false,
+  var hasHeartrate: Boolean = false,
 
   @Column(name = "average_cadence")
-  val averageCadence: Int? = null,
+  var averageCadence: Int? = null,
 
   @Column(name = "average_watts")
-  val averageWatts: Int? = null,
+  var averageWatts: Int? = null,
 
   @Column(name = "max_watts")
-  val maxWatts: Int? = null,
+  var maxWatts: Int? = null,
 
   @Column(name = "kilojoules", columnDefinition = "NUMERIC(10,2)")
-  val kilojoules: BigDecimal? = null,
+  var kilojoules: BigDecimal? = null,
 
   @Column(name = "calories")
-  val calories: Int? = null,
+  var calories: Int? = null,
 
   @Column(name = "created_at", nullable = false)
   val createdAt: Instant,
 
   @Column(name = "updated_at", nullable = false)
-  val updatedAt: Instant,
+  var updatedAt: Instant,
 ) {
   fun toDomain(): Activity =
     Activity(
