@@ -2,7 +2,6 @@ package com.lab.strava.domain.activity
 
 import com.lab.strava.common.exception.EntityNotFoundException
 import com.lab.strava.common.exception.GlobalExceptionHandler
-import com.lab.strava.domain.activity.dto.CreateActivityRequest
 import com.lab.strava.domain.activity.model.Activity
 import com.lab.strava.domain.activity.model.ActivityType
 import com.lab.strava.domain.activity.model.ActivityUse

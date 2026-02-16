@@ -6,12 +6,8 @@ import com.lab.strava.domain.activity.jpa.ActivityEntity
 import com.lab.strava.domain.activity.jpa.ActivityRepository
 import com.lab.strava.domain.activity.model.Activity
 import com.lab.strava.domain.activity.model.ActivityType
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -24,6 +20,10 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 
 @ExtendWith(MockitoExtension::class)
 class ActivityServiceTest {
@@ -69,7 +69,6 @@ class ActivityServiceTest {
       val result = activityService.createActivity(request)
 
       verify(activityRepository).save(entityCaptor.capture())
-      val savedEntity = entityCaptor.firstValue
 
       assertNotNull(result.id)
       assertEquals(request.name, result.name)
@@ -198,13 +197,13 @@ class ActivityServiceTest {
 
       whenever(activityRepository.findById(activityId)).thenReturn(Optional.empty())
 
-      val exception =
-        assertThrows<EntityNotFoundException> {
+      val ex =
+        assertFailsWith<EntityNotFoundException> {
           activityService.getActivityById(activityId)
         }
 
-      assertTrue(exception.message!!.contains("Activity"))
-      assertTrue(exception.message!!.contains(activityId.toString()))
+      assertContains(ex.message!!, "Activity")
+      assertContains(ex.message!!, activityId.toString())
     }
   }
 

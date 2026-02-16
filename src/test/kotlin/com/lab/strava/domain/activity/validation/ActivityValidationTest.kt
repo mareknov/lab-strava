@@ -2,12 +2,12 @@ package com.lab.strava.domain.activity.validation
 
 import com.lab.strava.domain.activity.dto.CreateActivityRequest
 import com.lab.strava.domain.activity.model.ActivityType
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.time.Instant
+import kotlin.test.assertContains
+import kotlin.test.assertFailsWith
 
 class ActivityValidationTest {
   @Test
@@ -76,11 +76,11 @@ class ActivityValidationTest {
         movingTime = 3400,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Distance must be >= 0"))
+    assertContains(ex.message!!, "Distance must be >= 0")
   }
 
   @Test
@@ -97,11 +97,11 @@ class ActivityValidationTest {
         movingTime = 3400,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Elapsed time must be > 0"))
+    assertContains(ex.message!!, "Elapsed time must be > 0")
   }
 
   @Test
@@ -118,11 +118,11 @@ class ActivityValidationTest {
         movingTime = 0,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Moving time must be > 0"))
+    assertContains(ex.message!!, "Moving time must be > 0")
   }
 
   @Test
@@ -139,11 +139,11 @@ class ActivityValidationTest {
         movingTime = 3400,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Moving time must be <= elapsed time"))
+    assertContains(ex.message!!, "Moving time must be <= elapsed time")
   }
 
   @Test
@@ -162,11 +162,11 @@ class ActivityValidationTest {
         elevLow = BigDecimal("320"),
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Elevation high must be > elevation low"))
+    assertContains(ex.message!!, "Elevation high must be > elevation low")
   }
 
   @Test
@@ -185,11 +185,11 @@ class ActivityValidationTest {
         maxSpeed = BigDecimal("4.00"),
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Max speed must be >= average speed"))
+    assertContains(ex.message!!, "Max speed must be >= average speed")
   }
 
   @Test
@@ -207,11 +207,11 @@ class ActivityValidationTest {
         averageHeartrate = -1,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Average heartrate must be between 0 and 300"))
+    assertContains(ex.message!!, "Average heartrate must be between 0 and 300")
   }
 
   @Test
@@ -229,11 +229,11 @@ class ActivityValidationTest {
         averageHeartrate = 301,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Average heartrate must be between 0 and 300"))
+    assertContains(ex.message!!, "Average heartrate must be between 0 and 300")
   }
 
   @Test
@@ -251,11 +251,11 @@ class ActivityValidationTest {
         maxHeartrate = 350,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Max heartrate must be between 0 and 300"))
+    assertContains(ex.message!!, "Max heartrate must be between 0 and 300")
   }
 
   @Test
@@ -272,10 +272,10 @@ class ActivityValidationTest {
         movingTime = 3400,
       )
 
-    val exception =
-      assertThrows<IllegalArgumentException> {
+    val ex =
+      assertFailsWith<IllegalArgumentException> {
         ActivityValidation.validateCreateRequest(request)
       }
-    assertTrue(exception.message!!.contains("Invalid timezone"))
+    assertContains(ex.message!!, "Invalid timezone")
   }
 }
